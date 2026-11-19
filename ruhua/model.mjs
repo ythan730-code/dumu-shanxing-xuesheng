@@ -17,7 +17,7 @@ export const STAGES=[
  {id:'cause-share',kind:'quiz',memory:5,title:'推敲「坐」字',poem:2,question:'請根據詩意猜一猜，在這裡，「坐」是甚麼意思？',options:['坐下','座位','因為'],correct:2,hint:'把三個意思分別放進詩句，讀一讀，哪個最通順？'},
  {id:'cause-found',kind:'dialogue',memory:5,title:'是楓林留住了他',poem:2,speech:'這裏的「坐」是「因為」。原來，是這片晚間的楓林留住了我。',next:'看看他眼中的秋色'},
  {id:'leaf',kind:'quiz',memory:6,title:'最後一抹紅',poem:3,speech:'「二月花」……我的眼前究竟是花，還是葉？',question:'請根據本句古詩，想一想眼前究竟應該恢復哪一種景象？',options:['盛開的二月春花','嫩綠的新葉','經霜的紅葉'],correct:2,hint:'先找出這句詩描寫的是甚麼，再想想「二月花」為甚麼會出現在句中。'},
- {id:'red-share',kind:'share',memory:6,title:'霜葉與春花',poem:3,speech:'是經霜的紅葉。那麼，我為甚麼還要提「二月花」？',next:'確認分享'},
+ {id:'removed-red-share',kind:'removed'},
  {id:'red-found',kind:'dialogue',memory:6,title:'秋山恢復了色彩',poem:3,speech:'我想起來了！經霜的葉子，比二月的花還要紅艷。我正是因為喜愛這片秋色，才停下車來。',next:'展開完整的記憶'},
  {id:'result',kind:'summary',title:'尋憶成果',speech:'石徑、白雲、人家，還有讓我停下車的楓林……謝謝你們，陪我找回這段記憶。',next:'進入讀詩圈選'},
  {id:'note',kind:'reflection',title:'讀詩圈選',question:'請再想一想，此次山行，杜牧選擇了哪些景物來描寫？',followup:'他最喜歡甚麼景物？你從哪些字詞看出來？'},
@@ -25,6 +25,8 @@ export const STAGES=[
 export const freshState=()=>({version:1,flowVersion:2,stage:2,choice:null,scoreStart:2,responses:{},reflection:emptyReflection(),sharedCause:false,sharedRed:false,draft:{favorite:'',quote:'',image:''},note:null});
 export function normalize(raw){const s=freshState();if(!raw||raw.version!==1)return s;
  s.stage=Number.isInteger(raw.stage)&&raw.stage>=2&&raw.stage<=20?(raw.flowVersion===2?Math.min(raw.stage,19):Math.min(raw.stage,18)):2;
+ // Keep later stage numbers stable so existing scores and annotations still load.
+ if(s.stage===16)s.stage=17;
  // Existing journeys begin scoring here; earlier answers are never invented.
  s.scoreStart=Number.isInteger(raw.scoreStart)&&raw.scoreStart>=-1&&raw.scoreStart<=s.stage?raw.scoreStart:s.stage;
  for(const [i,q] of STAGES.entries())if(q.kind==='quiz'&&i>=s.scoreStart&&i<=s.stage){
@@ -43,8 +45,8 @@ export function normalize(raw){const s=freshState();if(!raw||raw.version!==1)ret
  if(raw.note&&['favorite','quote','image'].every(k=>typeof raw.note[k]==='string'&&raw.note[k].trim()))s.note={favorite:raw.note.favorite.slice(0,40),quote:raw.note.quote.slice(0,70),image:raw.note.image.slice(0,140)};
  return s;
 }
-export function sceneFor(s){const n=s.stage;return {flatRoad:n===4,road:n>=5,clouds:n>=7,houses:n>=9,forest:n>=11,cart:n>=14,leaves:n>=17?'red':n>=16?'pale':'mist',evening:n>=11,full:n>=18,poet:n>=2,poetPlace:n<6?'foot':n<8?'trail':n<10?'high':'maple',gaze:n>=14};}
-export function advance(s,poetName){const n={...s,choice:null};const stage=STAGES[s.stage];if(stage?.kind==='identity'&&String(poetName??'').trim()!=='杜牧')return s;if(!stage||stage.kind==='quiz'||stage.kind==='reflection')return s;if(stage.id==='red-share')n.sharedRed=true;n.stage=Math.min(STAGES.length-1,s.stage+1);return n;}
+export function sceneFor(s){const n=s.stage;return {flatRoad:n===4,road:n>=5,clouds:n>=7,houses:n>=9,forest:n>=11,cart:n>=14,leaves:n>=17?'red':'mist',evening:n>=11,full:n>=18,poet:n>=2,poetPlace:n<6?'foot':n<8?'trail':n<10?'high':'maple',gaze:n>=14};}
+export function advance(s,poetName){const n={...s,choice:null};const stage=STAGES[s.stage];if(stage?.kind==='identity'&&String(poetName??'').trim()!=='杜牧')return s;if(!stage||stage.kind==='quiz'||stage.kind==='reflection')return s;if(stage.kind==='removed')n.sharedRed=true;n.stage=Math.min(STAGES.length-1,s.stage+1);return n;}
 export function questionPoints(s){const t=STAGES[s.stage];return Math.max(0,2-(s.responses?.[t?.id]?.length||0));}
 export function scoreSummary(s){
  let points=0,completed=0,firstTry=0,eligible=0,legacy=0;
@@ -62,6 +64,6 @@ export function answer(s){
  if(previous.includes(s.choice))return {state:s,error:'這個答案已試過，請先讀詩句，再選另一個答案。'};
  const next={...s,choice:null,responses:{...s.responses,[t.id]:[...previous,s.choice]}};
  if(s.choice!==t.correct)return {state:next,error:t.hint};
- return {state:{...next,stage:s.stage+1,sharedCause:s.sharedCause||t.id==='cause-share'},error:''};
+ return {state:{...next,stage:t.id==='leaf'?17:s.stage+1,sharedCause:s.sharedCause||t.id==='cause-share',sharedRed:s.sharedRed||t.id==='leaf'},error:''};
 }
 export const noteText=n=>n?`我最喜歡${n.favorite}。詩中的「${n.quote}」，讓我想像到${n.image.replace(/[。.!！?？]+$/u,'')}。`:'';

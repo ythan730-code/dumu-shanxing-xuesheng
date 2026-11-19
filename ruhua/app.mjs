@@ -1,8 +1,8 @@
 import {celebrate,clearCelebration,tossBomb} from './celebration.mjs?v=20261106-bomb-toss';
 import {reflectionMarkup,pickReflection,emptyReflection,assessReflection} from './reflection.mjs?v=20261106-bomb-toss';
-import {POEM,STAGES,freshState,normalize,sceneFor,advance,answer,noteText,questionPoints,scoreSummary} from './model.mjs?v=20261118-student-classroom';
+import {POEM,STAGES,freshState,normalize,sceneFor,advance,answer,noteText,questionPoints,scoreSummary} from './model.mjs?v=20261119-student-flow';
 import {createAutumnWorld} from './world.mjs?v=20261101-single-background';
-import {HINTS,newReveal,latestReveal} from './learning-support.mjs?v=20261106-bomb-toss';
+import {HINTS,newReveal,latestReveal} from './learning-support.mjs?v=20261119-student-flow';
 const KEY='ruhua-autumn-v1';
 let reflectionMode='scenery',reflectionShared=false;
 let lastVerse=null,hintLevel=0,revealTimer;

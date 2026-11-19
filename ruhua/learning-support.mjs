@@ -8,7 +8,6 @@ export const HINTS={
  cause:{clues:['坐','愛'],steps:['找一找「愛」字。詩人停車和他喜愛的景物有甚麼關係？','把「停車」和「愛楓林晚」連起來，想一想哪個選項能說明停車的原因。']},
  'cause-share':{clues:['坐','愛'],steps:['把三個意思分別放進詩句，讀一讀，哪個最通順？','前半句寫「停車」，後半句寫「愛楓林晚」。「坐」把詩人的行動和原因連起來。']},
  leaf:{clues:['霜葉'],steps:['先找這句正在描寫的景物。開頭是「葉」，還是「花」？','「霜葉」是經霜的葉子；「二月花」用來和葉子比較。想想眼前要找回的是哪一樣。']},
- 'red-share':{clues:['霜葉','紅於','二月花'],steps:['先找比較的兩樣景物，再看比較甚麼。','「紅於」就是「比……更紅」。試着說：「詩人覺得＿＿比＿＿更＿＿。」再想想，這樣比較突出了霜葉的甚麼特點。']},
  note:{clues:[],steps:['從第一句開始，依次找出詩中出現的景物，再看看完整的秋山。','留意「停車」「愛」「紅於」。這些字詞怎樣讓你知道詩人最喜歡甚麼？']}
 };
 
@@ -20,7 +19,6 @@ export const REVEALS=[
  {stage:9,id:'houses',title:'雲間的人家出現了',detail:'抬頭看山的高處，小小的屋舍就在雲間。',quote:'白雲生處有人家',x:1145,y:170,rx:132,ry:82,zoom:1.7},
  {stage:11,id:'forest',title:'楓林浮現了',detail:'看右側山坡，楓樹的枝葉還帶着淡淡的顏色。',quote:'楓林晚',x:1190,y:590,rx:200,ry:260,zoom:1.35},
  {stage:14,id:'cart',title:'馬車停在楓林旁了',detail:'看石徑旁停下的馬車，再想想它為甚麼停下。',quote:'停車坐愛楓林晚',x:390,y:735,rx:235,ry:125,zoom:1.55},
- {stage:16,id:'pale',title:'霜葉泛起淡紅色',detail:'仔細看看枝葉，模糊的葉色開始恢復了。',quote:'霜葉',x:1190,y:590,rx:200,ry:260,zoom:1.45},
  {stage:17,id:'red',title:'最後一抹紅回來了',detail:'楓葉由淡紅變得鮮明，這就是留住杜牧的秋色。',quote:'霜葉紅於二月花',x:1190,y:590,rx:200,ry:260,zoom:1.45}
 ];
 export function newReveal(previous,next){return next>previous?REVEALS.find(r=>r.stage===next):undefined;}
