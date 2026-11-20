@@ -1,5 +1,5 @@
 import {celebrate,clearCelebration,tossBomb} from './celebration.mjs?v=20261106-bomb-toss';
-import {reflectionMarkup,pickReflection,emptyReflection,assessReflection} from './reflection.mjs?v=20261106-bomb-toss';
+import {reflectionMarkup,pickReflection,emptyReflection,assessReflection} from './reflection.mjs?v=20261120-complete-v2';
 import {POEM,STAGES,freshState,normalize,sceneFor,advance,answer,noteText,questionPoints,scoreSummary} from './model.mjs?v=20261119-student-flow';
 import {createAutumnWorld} from './world.mjs?v=20261101-single-background';
 import {HINTS,newReveal,latestReveal} from './learning-support.mjs?v=20261119-student-flow';
@@ -58,7 +58,8 @@ function render(){clearCelebration();const t=STAGES[state.stage];main.className=
   wrap.querySelector(selector)?.focus({preventScroll:true});
   if(reflectionShared){wrap.querySelector('.picker-discussion')?.scrollIntoView({block:'nearest',behavior:'instant'});if(assessReflection(state.reflection).status==='correct'){
    celebrate();
-   const completion=document.createElement('p');completion.className='share-hint';completion.textContent='圈選完成！請停在這一頁，等老師帶領大家一起賞詩。';wrap.append(completion);
+   const completion=document.createElement('p');completion.className='share-hint';completion.textContent='圈選完成！請按老師指示前往回憶小記。';wrap.append(completion);
+   const journalLink=document.createElement('a');journalLink.className='journal-entry';journalLink.href='./activities.html';journalLink.textContent='回憶小記 →';wrap.append(journalLink);
   }else tossBomb();}else clearCelebration();
  });
  $('#revisit-mountain')?.addEventListener('click',()=>{taskCollapsed=true;syncTaskVisibility();world?.view('wide');});
